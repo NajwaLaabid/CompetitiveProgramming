@@ -13,6 +13,9 @@ int main(void) {
 	int n, head, node, best = 0, parent;
 	char c;
 
+	freopen("in.in", "r", stdin);
+	freopen("out.out", "w", stdout);
+
 	cin >> n >> head;
 
 	for( int i = 0; i < n; i++ ) {
@@ -29,7 +32,7 @@ int main(void) {
 		}
 	}
 
-	// get head 
+	// insert first children in stack
 	stack.insert( stack.end(), tree[head].begin(), tree[head].end() );
 
 	while( !stack.empty() ) {
@@ -41,7 +44,7 @@ int main(void) {
 
 		if( !tree[node].empty() ) {
 			head = node;
-			stack.insert( stack.end(), tree[node].begin(), tree[node].end() );
+			stack.insert( stack.end(), tree[head].begin(), tree[head].end() );
 		}
 
 		if( best < paths[node] ) 
