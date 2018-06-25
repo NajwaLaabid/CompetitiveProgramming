@@ -4,10 +4,34 @@
 
 using namespace std;
 
+vector<int> a;
+vector<int> occ;
+
+
+int count(int start, int rem, int score) {
+	int first = 0, second = 0, newIdx;
+
+	if( start >= a.size() )
+		return score;
+
+	else {
+		newIdx = start + occ[a[start]];
+
+		if( rem - 1 != a[start] )
+			first = a[start] * occ[a[start]] + count(newIdx, a[start], score);
+		else
+			first = count(newIdx, a[start], score);
+
+		if( newIdx < a.size() )
+			second = a[newIdx] * occ[a[newIdx]] + count(newIdx + occ[a[newIdx]], a[newIdx], score);
+
+		return score + max(first, second);
+	}
+}
+
 int main (void) {
 
 	int n, x, score = 0;
-	vector<int> a, occ;
 
 	// freopen("in.in", "r", stdin);
 	// freopen("out.out", "w", stdout);
@@ -26,27 +50,7 @@ int main (void) {
 
 	sort(a.begin(), a.end(), greater<int>());
 
-	for(int i = 0; i < n; i++){
-		x = a[i];
-
-		if ( x * occ[x] > ( (x-1) * occ[x-1] + (x+1) * occ[x+1] ) ) {
-			score += x * occ[x];
-			// cout << "adding : " << x * occ[x] << endl;
-			occ[x] = 0;
-			occ[x - 1] = 0;
-			occ[x + 1] = 0;
-		} else {
-			score += ( (x-1) * occ[x - 1] + ( x + 1 ) * occ[x+1] );
-			// cout << "adding in else. Nb: " << x << "Occ: " << occ[x] << endl;
-			occ[x-2 >= 0 ? x-2 : 0] = 0;
-			occ[x-1] = 0;
-			occ[x] = 0;
-			occ[x+1] = 0;
-			occ[x+2] = 0;
-		}
-	}
-
-	cout << score << endl;
+	cout << count(0, 0, 0) << endl;
 
 	return 0;
 }
